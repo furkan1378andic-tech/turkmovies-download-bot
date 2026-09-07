@@ -1,4 +1,5 @@
 import os
+
 from telegram import Update
 from telegram.ext import (
     Application,
@@ -39,25 +40,15 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.Document.ALL, get_file_id))
+    app.add_handler(
+        MessageHandler(filters.Document.ALL, get_file_id)
+    )
 
     print("Bot is running...", flush=True)
 
     app.run_polling(
         drop_pending_updates=True
     )
-
-
-if __name__ == "__main__":
-    main()        raise RuntimeError("BOT_TOKEN is not set")
-
-    app = Application.builder().token(BOT_TOKEN).build()
-
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.Document.ALL, get_file_id))
-
-    print("Bot is running...")
-    app.run_polling()
 
 
 if __name__ == "__main__":
