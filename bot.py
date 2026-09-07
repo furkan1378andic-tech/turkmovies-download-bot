@@ -1,5 +1,4 @@
 import os
-
 from telegram import Update
 from telegram.ext import (
     Application,
@@ -13,6 +12,8 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("START UPDATE RECEIVED", flush=True)
+
     parameter = context.args[0] if context.args else None
 
     if parameter == "ep20":
@@ -28,9 +29,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def get_file_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("DOCUMENT UPDATE RECEIVED", flush=True)
+
     if update.message and update.message.document:
         file_id = update.message.document.file_id
         print(f"FILE_ID: {file_id}", flush=True)
+
+
+async def any_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("MESSAGE UPDATE RECEIVED", flush=True)
 
 
 def main():
@@ -43,12 +50,13 @@ def main():
     app.add_handler(
         MessageHandler(filters.Document.ALL, get_file_id)
     )
-
-    print("Bot is running...", flush=True)
-
-    app.run_polling(
-        drop_pending_updates=True
+    app.add_handler(
+        MessageHandler(filters.ALL, any_message)
     )
+
+    print("BOT STARTING...", flush=True)
+
+    app.run_polling(drop_pending_updates=True)
 
 
 if __name__ == "__main__":
